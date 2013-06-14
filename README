@@ -1,0 +1,46 @@
+PerlVCBuildScripts
+
+Copyright 2013 Coolsoftware.
+http://blog.coolsoftware.ru/
+
+Perl scripts to increment build numbers in resource files (*.rc) of Visual C++ projects, 
+call ASProtect to protect result exe/dll files (optional) and make build info files 
+(app-build.txt) of the built application (optional).
+
+Perl-скрипты для автоматического увеличения номера билда в ресурсах (*.rc) проектов на 
+Visual C++, вызова ASProtect-а для генерации защищенного экземпляра приложения (exe или dll) 
+(опционально), и генерации файла app-build.txt с информацией о версии и MD5-подписью 
+собранного приложения (опционально).
+
+Пример build-файла app-build.txt (должен содержать ровно 4 строки!):
+
+1.0.0.0
+http://127.0.0.1/app.exe
+app.exe
+b9f2c07999dcafe9fe544a00521829c1
+
+Первая строка - версия приложения.
+Вторая строка - урл для скачки последней версии.
+Третья строка - имя файла приложения.
+Четвертая строк - MD5-подпись.
+
+Внимание! Perl-скрипты не создают новые app-build.txt файлы, только обновляют существующие.
+Поэтому, если Вы хотите чтобы каждый раз при сборке версии информация о версии заносислась 
+в app-build.txt, то нужно этот файл создать в каталоге ..\$config (путь относительно каталога,
+в котором расположен app.rc; $config - конфигурация, обычно Debug или Release).
+
+Для использования в Visual Studuo 2010 IDE нужно прописать:
+
+в Configuration Properties->Build Events->Pre-Build Event->Command Line:
+
+  perl $(ProjectDir)..\incbuild.pl $(ProjectDir) $(Configuration)
+  
+в Configuration Properties->Build Events->Post-Build Event->Command Line:
+
+  perl $(ProjectDir)..\makebuildinfo.pl $(TargetPath) $(ProjectDir)..\$(TargetName).aspr
+
+Вы можете использовать PerlVCBuildScripts без каких-либо ограничений.
+При публикации исходников ссылка на http://blog.coolsoftware.ru/ обязательна.
+
+Свои отзывы/предложения можете присылать на vitaly@coolsoftware.ru
+
